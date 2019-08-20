@@ -38,13 +38,21 @@ Commit your code regularly and use descriptive messages. This helps both you (in
 
 Demonstrate your understanding of this week's concepts by answering the following free-form questions. Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your project manager.
 
-- [ ] Explain the difference between `Relational Databases` and `SQL`.
+- [x] Explain the difference between `Relational Databases` and `SQL`.
 
-- [ ] Why do tables need a `primary key`?
+      Relational databases are similar to spreadsheets--they keep track of different entities (animals, users, messages), their attributes (species, email, content), and their relationships to one another or lack thereof. While they hold the data, SQL is the standard language we use to query and maintain it.
 
-- [ ] What is the name given to a table column that references the primary key on another table.
+- [x] Why do tables need a `primary key`?
 
-- [ ] What do we need in order to have a _many to many_ relationship between two tables.
+      A primary key is a single source of truth for identifying a record. It doesn't change and isn't reassigned when a record is deleted.
+
+- [x] What is the name given to a table column that references the primary key on another table.
+
+      A foreign key.
+
+* [x] What do we need in order to have a _many to many_ relationship between two tables.
+
+      An associative table and two one-to-many relationships that reference the primary keys of the entities we are trying to link. Like an author_id and a post_id.
 
 ## Minimum Viable Product
 

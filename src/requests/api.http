@@ -1,0 +1,47 @@
+@endpoint = http://localhost:4000/api
+
+###
+GET {{endpoint}}/projects
+
+###
+POST {{endpoint}}/projects
+Content-Type: application/json
+
+{
+  "name": "Build It, Build It Real Good"
+}
+
+###
+GET {{endpoint}}/projects/3/tasks
+
+###
+POST {{endpoint}}/projects/3/tasks
+Content-Type: application/json
+
+{
+  "description": "Build Anything",
+  "notes": "Keep Building"
+}
+
+###
+GET {{endpoint}}/projects/3/resources
+
+###
+POST {{endpoint}}/projects/3/resources
+Content-Type: application/json
+
+{
+  "resource_id": 2
+}
+
+###
+GET {{endpoint}}/resources
+
+###
+POST {{endpoint}}/resources
+Content-Type: application/json
+
+{
+  "name": "Your Mom",
+  "description": "Loves Me."
+}
