@@ -1,6 +1,9 @@
 const router = require("express").Router();
 const pm = require("../models/projects");
 
+
+//TODO add GET Project ID
+
 router.get("/", async (req, res) => {
   try {
     let projects = await pm.list();

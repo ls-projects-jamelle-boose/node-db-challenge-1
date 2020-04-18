@@ -81,3 +81,6 @@ typings/
 
 # eslint
 .eslintrc.js
+
+# Request
+request.http
