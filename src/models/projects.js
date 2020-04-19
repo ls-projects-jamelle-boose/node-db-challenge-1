@@ -1,96 +1,85 @@
-const db = require("../database");
-const tb = "projects";
+const db = require('../database');
 
-exports.list = id => {
+const Projects = db('projects'),
+  Tasks = db('tasks'),
+  ProjectResources = db('project_resources');
+
+exports.list = async (id) => {
   if (id) {
-    return db(tb)
-      .where({ id })
-      .first()
-      .then(project => ({
-        ...project,
-        completed: project.completed === true ? true : false
-      }));
-  }
-
-  return db(tb).then(projects =>
-    projects.map(project => ({
+    const project = await Projects.where({ id }).first();
+    return {
       ...project,
-      completed: project.completed === true ? true : false
-    }))
-  );
-};
-
-exports.listTasks = id => {
-  if (id) {
-    return db("tasks")
-      .where({ id })
-      .first()
-      .then(task => ({
-        ...task,
-        completed: task.completed === true ? true : false
-      }));
+      completed: project.completed === true ? true : false,
+    };
   }
 
-  return db("tasks").then(tasks =>
-    tasks.map(task => ({
+  const projects = await Projects;
+  return projects.map((project_1) => ({
+    ...project_1,
+    completed: project_1.completed === true ? true : false,
+  }));
+};
+
+exports.listTasks = async (id) => {
+  if (id) {
+    const task = await Tasks.where({ id }).first();
+    return {
       ...task,
-      completed: task.completed === true ? true : false
-    }))
-  );
+      completed: task.completed === true ? true : false,
+    };
+  }
+
+  const tasks = await Tasks;
+  return tasks.map((task_1) => ({
+    ...task_1,
+    completed: task_1.completed === true ? true : false,
+  }));
 };
 
-exports.new = project => {
-  return db(tb)
-    .insert(project)
-    .then(([id]) => this.list(id));
+exports.new = async (project) => {
+  const [id] = await Projects.insert(project);
+  return await this.list(id);
 };
 
-exports.newTask = task => {
-  return db("tasks")
-    .insert(task)
-    .then(([id]) => this.listTasks(id));
+exports.newTask = async (task) => {
+  const [id] = await Tasks.insert(task);
+  return await this.listTasks(id);
 };
 
-exports.newResource = resource => {
-  return db("project_resources")
-    .insert(resource)
-    .then(() => this.resources(resource.project_id));
+exports.newResource = async (resource) => {
+  await ProjectResources.insert(resource);
+  return await this.resources(resource.project_id);
 };
 
-exports.resources = id => {
-  return db("project_resources as pr")
+exports.resources = (id) => {
+  return db('project_resources as pr')
     .select(
-      "p.name as project_name",
-      "p.description as project_description",
-      "r.name",
-      "r.description"
+      'p.name as project_name',
+      'p.description as project_description',
+      'r.name',
+      'r.description'
     )
-    .join("projects as p", "p.id", "project_id")
-    .join("resources as r", "r.id", "resource_id")
+    .join('projects as p', 'p.id', 'project_id')
+    .join('resources as r', 'r.id', 'resource_id')
     .where({ project_id: id });
 };
 
-exports.rm = id =>
-  db(tb)
-    .where({ id })
-    .del();
+exports.rm = (id) => Projects.where({ id }).del();
 
-exports.tasks = id => {
-  return db("tasks as t")
+exports.tasks = (id) => {
+  return db('tasks as t')
     .select(
-      "p.name as project_name",
-      "p.description as project_description",
-      "t.description",
-      "notes",
-      "t.completed"
+      'p.name as project_name',
+      'p.description as project_description',
+      't.description',
+      'notes',
+      't.completed'
     )
-    .join("projects as p", "p.id", "project_id")
+    .join('projects as p', 'p.id', 'project_id')
     .where({ project_id: id });
 };
 
-exports.update = (project, id) => {
-  return db(tb)
-    .where({ id })
-    .update(project)
-    .then(() => this.list(id));
+exports.update = async (project, id) => {
+  await Projects.where({ id }).update(project);
+  return await this.list(id);
 };
