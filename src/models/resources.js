@@ -1,10 +1,9 @@
-const db = require("../database");
-const tb = "resources";
+const db = require('../database');
+const Resources = db('resources');
 
-exports.list = id => (id ? db(tb).where({ id }) : db(tb));
+exports.list = (id) => (id ? Resources.where({ id }) : Resources);
 
-exports.new = resource => {
-  return db(tb)
-    .insert(resource)
-    .then(([id]) => this.list(id));
+exports.new = async (resource) => {
+  const [id] = await Resources.insert(resource);
+  return await this.list(id);
 };
