@@ -1,49 +1,48 @@
-const router = require("express").Router();
-const pm = require("../models/projects");
-
+const router = require('express').Router();
+const pm = require('../models/projects');
 
 //TODO add GET Project ID
 
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     let projects = await pm.list();
 
     if (!projects.length) {
       return res.status(404).json({
-        message: "No projects.",
-        success: false
+        message: 'No projects.',
+        success: false,
       });
     }
 
     return res.json({
       projects,
-      success: true
+      success: true,
     });
   } catch (error) {
     return res.status(500).json({
       error,
-      message: "Projects could not be retrieved.",
-      success: false
+      message: 'Projects could not be retrieved.',
+      success: false,
     });
   }
 });
 
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   const newProject = req.body;
   const { name } = newProject;
   const length = Object.keys(newProject).length;
 
   if (!length) {
     return res.status(400).json({
-      message: "Missing project data.",
-      success: false
+      message: 'Missing project data.',
+      success: false,
     });
   }
 
   if (length > 0 && !name) {
     return res.status(400).json({
-      message: "Missing required name field.",
-      success: false
+      message: 'Missing required name field.',
+      success: false,
     });
   }
 
@@ -53,19 +52,19 @@ router.post("/", async (req, res) => {
     if (project) {
       return res.json({
         project,
-        success: true
+        success: true,
       });
     }
   } catch (error) {
     return res.status(500).json({
       error,
-      message: "Project could not be saved.",
-      success: false
+      message: 'Project could not be saved.',
+      success: false,
     });
   }
 });
 
-router.get("/:id/resources", async (req, res) => {
+router.get('/:id/resources', async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -73,25 +72,25 @@ router.get("/:id/resources", async (req, res) => {
 
     if (!resources.length) {
       return res.status(404).json({
-        message: "No resources.",
-        success: false
+        message: 'No resources.',
+        success: false,
       });
     }
 
     return res.json({
       resources,
-      success: true
+      success: true,
     });
   } catch (error) {
     return res.status(500).json({
       error,
-      message: "Project resources could not be retrieved.",
-      success: false
+      message: 'Project resources could not be retrieved.',
+      success: false,
     });
   }
 });
 
-router.post("/:id/resources", async (req, res) => {
+router.post('/:id/resources', async (req, res) => {
   const { id } = req.params;
   const newResource = req.body;
   const { resource_id } = newResource;
@@ -99,39 +98,39 @@ router.post("/:id/resources", async (req, res) => {
 
   if (!length) {
     return res.status(400).json({
-      message: "Missing resource data.",
-      success: false
+      message: 'Missing resource data.',
+      success: false,
     });
   }
 
-  if (length > 0 && !resource_id) {
+  if (!!length && !resource_id) {
     return res.status(400).json({
-      message: "Missing require resource_id field.",
-      success: false
+      message: 'Missing require resource_id field.',
+      success: false,
     });
   }
 
   try {
     const project_resources = await pm.newResource({
       project_id: id,
-      resource_id
+      resource_id,
     });
 
     if (project_resources) {
       return res.json({
         project_resources,
-        success: true
+        success: true,
       });
     }
   } catch (error) {
     return res.status(500).json({
-      message: "Project resource could not be saved.",
-      success: false
+      message: 'Project resource could not be saved.',
+      success: false,
     });
   }
 });
 
-router.get("/:id/tasks", async (req, res) => {
+router.get('/:id/tasks', async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -139,25 +138,25 @@ router.get("/:id/tasks", async (req, res) => {
 
     if (!tasks.length) {
       return res.status(404).json({
-        message: "No tasks.",
-        success: false
+        message: 'No tasks.',
+        success: false,
       });
     }
 
     return res.json({
       tasks,
-      success: true
+      success: true,
     });
   } catch (error) {
     return res.status(500).json({
       error,
-      message: "Project tasks could not be retrieved.",
-      success: false
+      message: 'Project tasks could not be retrieved.',
+      success: false,
     });
   }
 });
 
-router.post("/:id/tasks", async (req, res) => {
+router.post('/:id/tasks', async (req, res) => {
   const { id } = req.params;
   const newTask = req.body;
   const { description } = newTask;
@@ -165,35 +164,35 @@ router.post("/:id/tasks", async (req, res) => {
 
   if (!length) {
     return res.status(400).json({
-      message: "Missing task data.",
-      success: false
+      message: 'Missing task data.',
+      success: false,
     });
   }
 
   if (length > 0 && !description) {
     return res.status(400).json({
-      message: "Missing required description field.",
-      success: false
+      message: 'Missing required description field.',
+      success: false,
     });
   }
 
   try {
     const task = await pm.newTask({
       ...newTask,
-      project_id: id
+      project_id: id,
     });
 
     if (task) {
       return res.json({
         task,
-        success: true
+        success: true,
       });
     }
   } catch (error) {
     return res.status(500).json({
       error,
-      message: "Task could not be saved.",
-      success: false
+      message: 'Task could not be saved.',
+      success: false,
     });
   }
 });
